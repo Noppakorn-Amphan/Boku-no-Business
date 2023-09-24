@@ -1,0 +1,13 @@
+
+speaker "Dialoge here"
+speaker "dialogue Line 1{c}Line 2{a}Line 3"
+
+{c} clear
+{a} append
+{wc n} wait clear
+{wa n} wait append
+n = number of time
+
+
+Ep4/2
+speaker as characterName at 1:1 [0:Angel, 1:Happy] "segment{c}segment" commands(args)
