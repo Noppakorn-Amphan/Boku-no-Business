@@ -60,6 +60,14 @@ namespace DIALOGUE
                 //Run any Commands
                 if (line.hasCommands)
                     yield return Line_RunCommands(line);
+
+                if (line.hasDialogue)
+                {
+                    //wait for user input
+                    yield return WaitForUserInput();
+
+                    CommandManager.instance.StopAllProcess();
+                }
             }
         }
 
@@ -77,7 +85,7 @@ namespace DIALOGUE
             yield return BuildLineSegments(line.dialogueData);
 
             //Wait for user input
-            yield return WaitForUserInput();
+            //yield return WaitForUserInput();
         }
 
         private void HandleSpeakerLogic(DL_SPEAKER_DATA speakerData)
@@ -115,9 +123,22 @@ namespace DIALOGUE
             
             foreach (DL_COMMAND_DATA.Command command in commands)
             {
-                if (command.waitForCompletion)
-                    yield return CommandManager.instance.Execute(command.name, command.arguments);
-                CommandManager.instance.Execute(command.name, command.arguments);
+                if (command.waitForCompletion || command.name == "wait")
+                {
+                    CoroutineWrapper cw = CommandManager.instance.Execute(command.name, command.arguments);
+                    while (!cw.IsDone)
+                    {
+                        if (userPrompt)
+                        {
+                            CommandManager.instance.StopCurrentProcess();
+                            userPrompt = false;
+                        }
+                        yield return null;
+                    }
+
+                }
+                else
+                    CommandManager.instance.Execute(command.name, command.arguments);
             }
 
             yield return null;

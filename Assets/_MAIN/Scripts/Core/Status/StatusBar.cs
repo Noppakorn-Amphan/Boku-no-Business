@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 namespace STATUS
 {
-    [System.Serializable]
-    public class StatusElement
-    {
-        public TMP_Text nameText;
-        public TMP_Text valueText;
-    }
-
     public class StatusBar : MonoBehaviour
     {
+        [System.Serializable]
+        public class StatusElement
+        {
+            public TMP_Text nameText;
+            public TMP_Text valueText;
+        }
+
         [SerializeField] private StatusElement employeeCount;
         [SerializeField] private StatusElement employeeHappiness;
         [SerializeField] private StatusElement employeeSkill;
@@ -23,12 +23,15 @@ namespace STATUS
         [SerializeField] private StatusElement budget;
         [SerializeField] private StatusElement work;
         [SerializeField] private StatusElement working;
-        [SerializeField] private TMP_Text monthAndYear;
+        [SerializeField] private TMP_Text monthText;
+        [SerializeField] private TMP_Text yearText;
 
         public CompanyManager companyManager;
+        public DecisionManager decisionManager;
 
-        private int currentMonth = 1;
-        private int currentYear = 1;
+        [SerializeField] private int currentMonth = 1;
+        [SerializeField] private int currentYear = 1;
+        [SerializeField] private int decisionsCount = 0;
 
         private string[] thaiMonthNames = new string[]
         {
@@ -56,7 +59,7 @@ namespace STATUS
             UpdateStatusValues();
         }
 
-        public void UpdateStatusValues() // Change the accessibility to public
+        public void UpdateStatusValues()
         {
             employeeCount.valueText.text = companyManager.employeeNumber.ToString();
             employeeHappiness.valueText.text = companyManager.employeeHappiness.ToString();
@@ -67,11 +70,18 @@ namespace STATUS
             work.valueText.text = companyManager.work.ToString();
 
             float workingValue = (companyManager.employeeNumber * companyManager.employeeSkills) / 10f;
-            working.valueText.text = workingValue.ToString();
+            working.valueText.text = workingValue.ToString("F1"); // Format to 1 decimal place
 
+            // Update the month and year based on decision count
+            UpdateMonthAndYearThai();
+
+        }
+
+        private void UpdateMonthAndYearThai()
+        {
             string monthName = GetThaiMonthName(currentMonth);
-            string formattedMonthAndYear = "ปีที่ " + currentYear.ToString() + "\n" + monthName;
-            monthAndYear.text = formattedMonthAndYear;
+            monthText.text = monthName;
+            yearText.text = currentYear.ToString();
         }
 
         private string GetThaiMonthName(int monthNumber)
@@ -92,6 +102,24 @@ namespace STATUS
                 companyManager.budget++;
 
                 UpdateStatusValues();
+            }
+        }
+
+        // Call this function when a decision is made
+        public void DecisionMade()
+        {
+            decisionsCount++;
+
+            if (decisionsCount % 2 == 0)
+            {
+                currentMonth++;
+            }
+
+            if (decisionsCount % 12 == 0)
+            {
+                currentMonth = 1;
+                decisionsCount = 0;
+                currentYear++;
             }
         }
     }

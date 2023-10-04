@@ -1,9 +1,54 @@
-enter Miyako as เลขาจัง "สวัสดีหัวหน้า"
-enter Miyako as เลขาจัง "สวัสดี"
-Miyako as เลขาจัง "เช้านี้เป็นไงบ้างคะ"
-Miyako as เลขาจัง "ช่วงนี้อากาศหนาว ระวังเป็นหวัดนะคะ"
-Miyako as เลขาจัง at 2 "ฉันไปทำงานก่อนนะคะ"
-enter Raelin "ไง"
-Raelin at 0.5 [0:B4,1:P2_Smile] "เราได้เจอกันอีกแล้วนะ"
-Raelin "ช่วงนี้ฉันก็ยุ่งหน่อย"
-Raelin at -1 "แล้วเจอกันนะ"
+
+wait(1)
+
+SetLayerMedia(background "Fantasy Landscape" -aud true -spd 0.7 -blend hurricane -i true)
+
+CreateCharacter(Raelin -e true -i true)
+
+Raelin "ยินดีตอนรับสู่อวกาศ"
+
+SetLayerMedia(cinematic -m "#/Graphics/Gallery/flower" -blend leftRight)
+
+Raelin "ลองดูรูปนี้สิ"
+
+ClearLayerMedia(cinematic -blend leftRight)
+
+Raelin "เลเยอร์ cinematic น่าจะเคลียแล้วนะ"
+
+
+
+
+wait(10)
+
+
+CreateCharacter(Raelin 1 -e true -i true), CreateCharacter("Guard1 as Generic" -e true -i true), CreateCharacter("FS2 as Female Student 2" -e true -i true)
+
+Raelin.SetPosition(1), FS2.SetPosition(0)
+
+Raelin "หัวหน้าคะ บริษัทเรามีจำนวนพนักงานน้อยควรรับสมัครพนักงานไหมคะ?(งบประมาณ -1 การตลาด -1 จำนวนพนักงาน +5)", decision(-ec 5 -eh 0 -es 0 -m -1 -r 0 -b -1 -w 0 -wk 0)
+Raelin "หัวหน้าคะ บริษัทเรามีจำนวนพนักงานน้อยควรรับสมัครพนักงานไหมคะ?(งบประมาณ -1 การตลาด -1 จำนวนพนักงาน +5)", decision(-ec 0 -eh 0 -es 0.5 -m 0 -r 0 -b -1 -w 0 -wk 0)
+
+wait(1)
+
+Raelin.SetSprite(B4 -l 0 -spd 0.75), Raelin.SetSprite(P2_Shy -l 1 -spd 0.75)
+
+wait(3)
+
+[wait]Unhighlight(Raelin FS2 Guard1), wait(1), [wait]Highlight(Raelin FS2 Guard1), wait(1)
+
+Guard1.Show(-i true), wait(0.5)
+
+[wait]Highlight(Raelin -o true), wait(1), [wait]Unhighlight(Raelin -o true)
+
+
+[wait]MoveCharacter(Raelin 1 -2.5 -spd 0.5)
+
+[wait]Raelin.Hide(), [wait]Raelin.Show()
+
+[wait]Raelin.Move(0 1 -spd 0.5)
+
+Hide(Raelin Guard1 -spd 0.1)
+Narrator "ตอนนี้กำลังซ่อนตัวละคร"
+
+Show(Raelin Guard1 -spd 0.1)
+Narrator "กำลังโชว์ตัวละคร"

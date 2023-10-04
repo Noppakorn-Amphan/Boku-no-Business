@@ -41,3 +41,10 @@ MonoBehaviour:
     dialogueColor: {r: 1, g: 0, b: 0.397727, a: 1}
     nameFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
     dialogueFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
+  - name: Narrator
+    alias: n
+    characterType: 1
+    nameColor: {r: 0.34901962, g: 0, b: 0.14117648, a: 1}
+    dialogueColor: {r: 0.3529412, g: 0.007843138, b: 0.14509805, a: 1}
+    nameFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
+    dialogueFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}

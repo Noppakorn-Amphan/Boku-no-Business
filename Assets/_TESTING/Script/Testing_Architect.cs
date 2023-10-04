@@ -40,8 +40,7 @@ namespace TESTING
 
             if (Input.GetKeyDown(KeyCode.S))
                 architect.Stop();
-            
-            string longLine = "this is a very long line that makes no sense but I am just poplating it with stuff because, you know?, stuff is good right? I like stuff, you like stuff and the turkey like stuff.";
+        
             
             if (Input.GetKeyDown(KeyCode.Space))
             {
