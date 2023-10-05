@@ -14,10 +14,14 @@ namespace DIALOGUE
         public bool isRunning =>  process != null;
         private TextArchitect architect = null;
         private bool userPrompt = false;
+
+        private TagManager tagManager;
         public ConversationManager(TextArchitect architect)
         {
             this.architect = architect;
             dialogueSystem.onUserPrompt_Next += onUserPrompt_Next;
+
+            tagManager = new TagManager();
         }
 
         private void onUserPrompt_Next()
@@ -101,7 +105,7 @@ namespace DIALOGUE
                 character.Show();
 
             //Add character name to the UI
-            dialogueSystem.ShowSpeakerName(speakerData.displayname);
+            dialogueSystem.ShowSpeakerName(tagManager.Inject(speakerData.displayname));
 
             //customize the dialogue for the character - if applicable
             DialogueSystem.instance.ApplySpeakerDataToDialogueContainer(speakerData.name);
@@ -178,6 +182,8 @@ namespace DIALOGUE
 
         IEnumerator BuildDialogue(string dialogue, bool append = false)
         {
+            dialogue = tagManager.Inject(dialogue);
+
             //Build the dialogue
             if (!append)
                 architect.Build(dialogue);

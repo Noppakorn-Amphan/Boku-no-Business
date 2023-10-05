@@ -1,3 +1,7 @@
+Narrator "และนี่คือจุดเริ่มต้นการผจญภัยของ <mainChar>"
+<mainChar> "สวัสดี ผมชื่อว่า <mainChar>. {c}ตอนนี้เวลาเท่าไหร่"
+Narrator "ตอนนี้เวลา <time> และนายก็เลเวล <playerLevel>"
+
 
 wait(1)
 
