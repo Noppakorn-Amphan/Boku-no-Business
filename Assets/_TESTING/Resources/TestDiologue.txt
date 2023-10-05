@@ -1,7 +1,7 @@
 
 wait(1)
 
-SetLayerMedia(background "Fantasy Landscape" -aud true -spd 0.7 -blend hurricane -i true)
+SetLayerMedia(background "Fantasy Landscape" -aud true -spd 0.7 -blend hurricane)
 
 CreateCharacter(Raelin -e true -i true)
 
@@ -14,14 +14,25 @@ Raelin "ลองดูรูปนี้สิ"
 ClearLayerMedia(cinematic -blend leftRight)
 
 Raelin "เลเยอร์ cinematic น่าจะเคลียแล้วนะ"
+Raelin "ทดสอบระบบ DialogueBox"
+Raelin "ซ่อน DB"
+HideDB()
 
+Raelin "แสดง DB"
+ShowDB()
 
+Raelin "ทดสอบระบบแสดงซ่อนทั้งหมด"
+[wait]HideUI(-spd 0.5)
+
+wait(2)
+
+[wait]ShowUi(-i true)
 
 
 wait(10)
 
 
-CreateCharacter(Raelin 1 -e true -i true), CreateCharacter("Guard1 as Generic" -e true -i true), CreateCharacter("FS2 as Female Student 2" -e true -i true)
+CreateCharacter("Guard1 as Generic" -e true -i true), CreateCharacter("FS2 as Female Student 2" -e true -i true)
 
 Raelin.SetPosition(1), FS2.SetPosition(0)
 

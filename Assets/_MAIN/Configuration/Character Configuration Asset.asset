@@ -20,6 +20,8 @@ MonoBehaviour:
     dialogueColor: {r: 0.5647059, g: 0.49411768, b: 0.70980394, a: 1}
     nameFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
     dialogueFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
   - name: Raelin
     alias: Rae
     characterType: 2
@@ -27,6 +29,8 @@ MonoBehaviour:
     dialogueColor: {r: 0.3529412, g: 0.007843138, b: 0.14509805, a: 1}
     nameFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
     dialogueFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
   - name: Generic
     alias: Gen
     characterType: 2
@@ -34,6 +38,8 @@ MonoBehaviour:
     dialogueColor: {r: 0.69411767, g: 0.70980394, b: 0.7490196, a: 1}
     nameFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
     dialogueFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
   - name: Miyako
     alias: Mi
     characterType: 1
@@ -41,6 +47,8 @@ MonoBehaviour:
     dialogueColor: {r: 1, g: 0, b: 0.397727, a: 1}
     nameFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
     dialogueFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1
   - name: Narrator
     alias: n
     characterType: 1
@@ -48,3 +56,5 @@ MonoBehaviour:
     dialogueColor: {r: 0.3529412, g: 0.007843138, b: 0.14509805, a: 1}
     nameFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
     dialogueFont: {fileID: 11400000, guid: ac540a709612f9747aaaab5feda0e6e8, type: 2}
+    nameFontScale: 1
+    dialogueFontScale: 1

@@ -61,6 +61,7 @@ namespace DIALOGUE
                 if (line.hasCommands)
                     yield return Line_RunCommands(line);
 
+                //Wait for user input if dialogue was in this line
                 if (line.hasDialogue)
                 {
                     //wait for user input
@@ -80,12 +81,14 @@ namespace DIALOGUE
             }
             /*else
                 dialogueSystem.HideSpeakerName();*/
+
+            //If the dialogue box is not visible - make sure it becomes visible automatically
+            if (!dialogueSystem.dialogueContainer.isVisible)
+                dialogueSystem.dialogueContainer.Show();
             
             //Build Dialogue
             yield return BuildLineSegments(line.dialogueData);
 
-            //Wait for user input
-            //yield return WaitForUserInput();
         }
 
         private void HandleSpeakerLogic(DL_SPEAKER_DATA speakerData)
@@ -199,8 +202,12 @@ namespace DIALOGUE
 
         IEnumerator WaitForUserInput()
         {
+            dialogueSystem.prompt.Show();
+
             while (!userPrompt)
                 yield return null;
+
+            dialogueSystem.prompt.Show();
             
             userPrompt = false;
         }
