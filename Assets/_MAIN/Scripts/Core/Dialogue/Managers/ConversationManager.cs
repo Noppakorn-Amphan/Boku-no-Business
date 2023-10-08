@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using COMMANDS;
 using CHARACTERS;
+using DIALOGUE.LogicalLines;
 
 namespace DIALOGUE
 {
@@ -16,12 +17,14 @@ namespace DIALOGUE
         private bool userPrompt = false;
 
         private TagManager tagManager;
+        private LogicalLineManager logicalLineManager;
         public ConversationManager(TextArchitect architect)
         {
             this.architect = architect;
             dialogueSystem.onUserPrompt_Next += onUserPrompt_Next;
 
             tagManager = new TagManager();
+            logicalLineManager = new LogicalLineManager();
         }
 
         private void onUserPrompt_Next()
@@ -57,21 +60,29 @@ namespace DIALOGUE
 
                 DIALOGUE_LINE line = DialogueParser.Parse(conversation[i]);
 
-                //Show dialogue
-                if (line.hasDialogue)
-                    yield return Line_RunDialogue(line);
-
-                //Run any Commands
-                if (line.hasCommands)
-                    yield return Line_RunCommands(line);
-
-                //Wait for user input if dialogue was in this line
-                if (line.hasDialogue)
+                if (logicalLineManager.TryGetLogic(line, out Coroutine logic))
                 {
-                    //wait for user input
-                    yield return WaitForUserInput();
+                    yield return logic;
+                }
 
-                    CommandManager.instance.StopAllProcess();
+                else
+                {
+                    //Show dialogue
+                    if (line.hasDialogue)
+                        yield return Line_RunDialogue(line);
+
+                    //Run any Commands
+                    if (line.hasCommands)
+                        yield return Line_RunCommands(line);
+
+                    //Wait for user input if dialogue was in this line
+                    if (line.hasDialogue)
+                    {
+                        //wait for user input
+                        yield return WaitForUserInput();
+
+                        CommandManager.instance.StopAllProcess();
+                    }
                 }
             }
         }

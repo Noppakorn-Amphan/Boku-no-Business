@@ -1,3 +1,12 @@
+Narrator "คุณชื่ออะไร ?"
+
+input "Enter your Name."
+
+Narrator "ยินดีที่รู้จัก <input>!"
+
+
+
+
 Narrator "และนี่คือจุดเริ่มต้นการผจญภัยของ <mainChar>"
 <mainChar> "สวัสดี ผมชื่อว่า <mainChar>. {c}ตอนนี้เวลาเท่าไหร่"
 Narrator "ตอนนี้เวลา <time> และนายก็เลเวล <playerLevel>"

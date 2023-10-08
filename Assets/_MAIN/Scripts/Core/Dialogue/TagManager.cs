@@ -17,6 +17,7 @@ public class TagManager
         tags["<mainChar>"] = () => "Avira";
         tags["<time>"] = () => DateTime.Now.ToString("hh:mm tt");
         tags["<playerLevel>"] = () => "15";
+        tags["<input>"] = () => InputPanel.instance.lastInput;
         tags["<tempVall>"] = () => "42";
     }
 
