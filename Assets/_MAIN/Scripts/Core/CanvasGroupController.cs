@@ -17,12 +17,18 @@ public class CanvasGroupController
     public bool isHiding => co_hiding != null;
     public bool isFading => isShowing || isHiding;
 
-        public bool isVisible => co_showing != null || rootCG.alpha > 0;
+    public bool isVisible => co_showing != null || rootCG.alpha > 0;
+    public float alpha { get { return rootCG.alpha; } set { rootCG.alpha = value; } }
 
     public CanvasGroupController(MonoBehaviour owner, CanvasGroup rootCG)
     {
         this.owner = owner;
         this.rootCG = rootCG;
+
+        if (rootCG == null)
+        {
+            Debug.LogError("CanvasGroup is null in CanvasGroupController constructor.");
+        }
     }
 
     public Coroutine Show(float speed = 1f, bool immediate = false)
@@ -70,5 +76,10 @@ public class CanvasGroupController
 
         co_showing = null;
         co_hiding = null;
+    }
+    public void SetInteractableState(bool active)
+    {
+        rootCG.interactable = active;
+        rootCG.blocksRaycasts = active;
     }
 }

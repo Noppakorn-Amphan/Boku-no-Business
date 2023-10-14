@@ -8,11 +8,24 @@ namespace STATUS
 {
     public class StatusBar : MonoBehaviour
     {
+        public static StatusBar instance;
         [System.Serializable]
         public class StatusElement
         {
             public TMP_Text nameText;
             public TMP_Text valueText;
+        }
+
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                Destroy(gameObject);
+            }
         }
 
         [SerializeField] private StatusElement employeeCount;
@@ -32,6 +45,8 @@ namespace STATUS
         [SerializeField] private int currentMonth = 1;
         [SerializeField] private int currentYear = 1;
         [SerializeField] private int decisionsCount = 0;
+        [SerializeField] private CanvasGroup canvasGroup;
+        private CanvasGroupController cg;
 
         private string[] thaiMonthNames = new string[]
         {
@@ -51,13 +66,32 @@ namespace STATUS
 
         private void Start()
         {
+            cg = new CanvasGroupController(this, canvasGroup);
+            cg.alpha = 0;
+            cg.SetInteractableState(active: false);
             UpdateStatusValues();
         }
 
-        private void Update()
+        public void Show()
         {
-            UpdateStatusValues();
+            if (canvasGroup != null)
+            {
+                canvasGroup.alpha = 1f; // Set the alpha to make it visible
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true; // Optional: Enable raycasts if needed
+            }
         }
+
+        public void Hide()
+        {
+            if (canvasGroup != null)
+            {
+                canvasGroup.alpha = 0f; // Set the alpha to make it invisible
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false; // Optional: Disable raycasts if needed
+            }
+        }
+
 
         public void UpdateStatusValues()
         {

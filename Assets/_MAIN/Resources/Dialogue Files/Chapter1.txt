@@ -1,0 +1,3 @@
+[wait]SetLayerMedia(background "Town Street" -spd 0.7 -blend leftRight)
+Narrator "หลังจากนั้นก็ผ่านไป 7 วัน"
+Narrator "เริ่ม Chapter1"

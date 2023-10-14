@@ -1,0 +1,7 @@
+PlayAmbience(RainyMood)
+PlaySong("Happy")
+PlayVoice("wakeup")
+enter Miyako "ได้แล้ว!"
+
+StopSong()
+StopAmbience()

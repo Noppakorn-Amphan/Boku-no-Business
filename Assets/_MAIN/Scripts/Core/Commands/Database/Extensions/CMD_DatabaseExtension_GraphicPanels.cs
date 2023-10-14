@@ -20,7 +20,7 @@ namespace COMMANDS
         private static string[] PARAM_BLENDTEX = new string[] { "-b", "-blend" };
         private static string[] PARAM_USEVIDEOAUDIO = new string[] { "-aud", "-audio" };
 
-        private const string HOMEDIRECTORY_SYMBOL = "#/";
+        private const string HOMEDIRECTORY_SYMBOL = "/~";
         
         new public static void Extend(CommandDatabase database)
         {

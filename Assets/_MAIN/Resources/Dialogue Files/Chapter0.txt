@@ -1,0 +1,38 @@
+HideStatus()
+PlaySong("Happy" -l true)
+Narrator "คุณชื่ออะไร?"
+input "Enter your Name."
+Narrator "ยินดีที่รู้จัก <input>"
+SetLayerMedia(background "Town Street" -spd 0.7 -blend leftRight)
+Narrator "เรื่องราวต่อไปนี้ คุณรับบทเป็นลูกชายบริษัทชื่อดัง แต่แล้วบริษัทพ่อของคุณก็ล้มละลาย จนมีหนี้สินเป็นจำนวนมาก"
+Narrator "คุณกำลังคิดว่าจะทำอะไรต่อไปดี"
+CreateCharacter("Miyako" -e true), Miyako.SetColor(-c black), Miyako.SetPosition(-1)
+[wait]Miyako.Move(0)
+Miyako as ??? "คุณน่ะ ใช่ <input> ใช้ไหม"
+choice "คนแปลกหน้าถามคุณ"
+{
+    -ใช่แล้วผมเอง
+        Miyako.SetColor(-c white)
+        Miyako "ใช่คุณจริงด้วย ฉันชื่อว่า ฮาราโนะ มิยาโกะ"
+
+    -คุณควรแนะนำตัวก่อนถามชื่อคนอื่นนะ
+        Miyako.SetColor(-c white -spd 0.2)
+        Miyako "ขอโทษทีเสียมารยาท ฉันชื่อว่า ฮาราโนะ มิยาโกะ"
+}
+<input> "คุณมีธุระอะไรกับผมหรือเปล่า?"
+Miyako "ฉันเคยเป็นเลขาของคุณพ่อของคุณ พอบริษัทล้มละลาย ฉันไม่รู้ว่าจะไปทำงานที่ไหน"
+Miyako "ได้ข่าวว่าครอบครัวคุณติดหนี้มหาศาล และคุณเองก็เก่งแถมยังฉลาด"
+Miyako "สนใจมาเปิดบริษัทกับฉันไหม?"
+choice "คุณจะตัดสินใจอย่างไร?"
+{
+    -ยอมรับข้อเสนอ
+    Miyako "งั้นตามนี้นะคะ ฉันจะติดต่อคุณไปทีหลัง"
+
+    -ปฏิเสธข้อเสนอ
+    Miyako "..."
+    Miyako "ไม่เป็นไรคะ ไว้เจอกันนะคะ"
+}
+[wait]Miyako.Move(2)
+[wait]ClearLayerMedia(background -blend leftRight)
+wait(2)
+Load(Chapter1)

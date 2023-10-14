@@ -13,30 +13,44 @@ namespace DIALOGUE
         private DialogueSystem dialogueSystem => DialogueSystem.instance;
         private Coroutine process = null;
         public bool isRunning =>  process != null;
+        public bool isOnLogicalLine { get; private set; } = false;
         public TextArchitect architect = null;
         private bool userPrompt = false;
 
-        private TagManager tagManager;
         private LogicalLineManager logicalLineManager;
+
+        public Conversation conversation => (conversationQueue.isEmpty() ? null : conversationQueue.top);
+        public int conversationProgress => (conversationQueue.isEmpty() ? -1 : conversationQueue.top.GetProgress());
+        private ConversationQueue conversationQueue;
+
+        public bool allowUserPrompts = true;
         public ConversationManager(TextArchitect architect)
         {
             this.architect = architect;
             dialogueSystem.onUserPrompt_Next += onUserPrompt_Next;
 
-            tagManager = new TagManager();
             logicalLineManager = new LogicalLineManager();
+
+            conversationQueue = new ConversationQueue();
         }
+
+        public void Enqueue(Conversation conversation) => conversationQueue.Enqueue(conversation);
+        public void EnqueuePriority(Conversation conversation) => conversationQueue.EnqueuePriority(conversation);
 
         private void onUserPrompt_Next()
         {
-            userPrompt = true;
+            if (allowUserPrompts)
+                userPrompt = true;
         }
         
-        public Coroutine StartConversation(List<string> conversation)
+        public Coroutine StartConversation(Conversation conversation)
         {
             StopConversation();
+            conversationQueue.Clear();
 
-            process = dialogueSystem.StartCoroutine(RunningConversation(conversation));
+            Enqueue(conversation);
+
+            process = dialogueSystem.StartCoroutine(RunningConversation());
             
             return process;
         }
@@ -50,18 +64,31 @@ namespace DIALOGUE
             process = null;
         }
 
-        IEnumerator RunningConversation(List<string> conversation)
+        IEnumerator RunningConversation()
         {
-            for(int i = 0; i < conversation.Count; i++)
+            while(!conversationQueue.isEmpty())
             {
-                //Don't show any blank lines or try to run ant logic on them.
-                if (string.IsNullOrWhiteSpace(conversation[i]))
+                Conversation currentConversation = conversation;
+                
+                if (currentConversation.HasReachedEnd())
+                {
+                    conversationQueue.Dequeue();
                     continue;
+                }
+                string rawLine = currentConversation.CurrentLine();
 
-                DIALOGUE_LINE line = DialogueParser.Parse(conversation[i]);
+                //Don't show any blank lines or try to run ant logic on them.
+                if (string.IsNullOrWhiteSpace(rawLine))
+                {
+                    TryAdvanceConversation(currentConversation);
+                    continue;
+                }
+
+                DIALOGUE_LINE line = DialogueParser.Parse(rawLine);
 
                 if (logicalLineManager.TryGetLogic(line, out Coroutine logic))
                 {
+                    isOnLogicalLine = true;
                     yield return logic;
                 }
 
@@ -82,9 +109,27 @@ namespace DIALOGUE
                         yield return WaitForUserInput();
 
                         CommandManager.instance.StopAllProcess();
+
+                        dialogueSystem.OnSystemPrompt_Clear();
                     }
                 }
+
+                TryAdvanceConversation(currentConversation);
+                isOnLogicalLine = false;
             }
+
+            process = null;
+        }
+
+        private void TryAdvanceConversation(Conversation conversation)
+        {
+            conversation.IncrementProgress();
+
+            if (conversation != conversationQueue.top)
+                return;
+
+            if (conversation.HasReachedEnd())
+                conversationQueue.Dequeue();
         }
 
         IEnumerator Line_RunDialogue(DIALOGUE_LINE line)
@@ -116,7 +161,7 @@ namespace DIALOGUE
                 character.Show();
 
             //Add character name to the UI
-            dialogueSystem.ShowSpeakerName(tagManager.Inject(speakerData.displayname));
+            dialogueSystem.ShowSpeakerName(TagManager.Inject(speakerData.displayname));
 
             //customize the dialogue for the character - if applicable
             DialogueSystem.instance.ApplySpeakerDataToDialogueContainer(speakerData.name);
@@ -181,10 +226,18 @@ namespace DIALOGUE
             switch(segment.startSignal)
             {
                 case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.C:
+                    yield return WaitForUserInput();
+                    dialogueSystem.OnSystemPrompt_Clear();
+                    break;
                 case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.A:
                     yield return WaitForUserInput();
                     break;
                 case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WC:
+                    isWaitingOnAutoTimer = true;
+                    yield return new WaitForSeconds(segment.signalDelay);
+                    isWaitingOnAutoTimer = false;
+                    dialogueSystem.OnSystemPrompt_Clear();
+                    break;
                 case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WA:
                     isWaitingOnAutoTimer = true;
                     yield return new WaitForSeconds(segment.signalDelay);
@@ -197,7 +250,7 @@ namespace DIALOGUE
 
         IEnumerator BuildDialogue(string dialogue, bool append = false)
         {
-            dialogue = tagManager.Inject(dialogue);
+            dialogue = TagManager.Inject(dialogue);
 
             //Build the dialogue
             if (!append)

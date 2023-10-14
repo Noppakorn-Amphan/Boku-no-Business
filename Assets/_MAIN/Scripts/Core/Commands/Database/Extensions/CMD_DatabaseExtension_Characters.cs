@@ -27,6 +27,11 @@ namespace COMMANDS
             database.AddCommand("highlight", new Func<string[] , IEnumerator>(HighlightAll));
             database.AddCommand("unhighlight", new Func<string[] , IEnumerator>(UnhighlightAll));
             database.AddCommand("decision", new Action<string[]>(Decision));
+            database.AddCommand("showstatus", new Action<string[]>(ShowStatusBar));
+            database.AddCommand("hidestatus", new Action<string[]>(HideStatusBar));
+
+            
+            
 
             //Add commands to characters
             CommandDatabase baseCommands = CommandManager.instance.CreateSubDatabase(CommandManager.DATABASE_CHARACTERS_BASE);
@@ -548,6 +553,32 @@ namespace COMMANDS
                 workChange,
                 workingChange
             );
+        }
+
+        public static void ShowStatusBar(string[] data)
+        {
+            StatusBar statusBar = StatusBar.instance; // Access the static instance
+            if (statusBar != null)
+            {
+                statusBar.Show(); // Call the Show method
+            }
+            else
+            {
+                Debug.LogError("StatusBar instance is null or not found.");
+            }
+        }
+
+        public static void HideStatusBar(string[] data)
+        {
+            StatusBar statusBar = StatusBar.instance; // Access the static instance
+            if (statusBar != null)
+            {
+                statusBar.Hide(); // Call the Hide method
+            }
+            else
+            {
+                Debug.LogError("StatusBar instance is null or not found.");
+            }
         }
 
 

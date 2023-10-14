@@ -11,7 +11,7 @@ namespace DIALOGUE
         public DialogueSystemConfigurationSO config => _config;
         
         public DialogueContainer dialogueContainer = new DialogueContainer();
-        private ConversationManager conversationManager;
+        public ConversationManager conversationManager { get; private set; }
         private TextArchitect architect;
         private AutoReader autoReader;
         [SerializeField] private CanvasGroup mainCanvas;
@@ -20,6 +20,7 @@ namespace DIALOGUE
 
         public delegate void DialogueSystemEvent();
         public event DialogueSystemEvent onUserPrompt_Next;
+        public event DialogueSystemEvent onClear;
 
         public bool isRunningConversation => conversationManager.isRunning;
 
@@ -67,6 +68,28 @@ namespace DIALOGUE
             onUserPrompt_Next?.Invoke();
         }
 
+        public void OnSystemPrompt_Clear()
+        {
+            onClear?.Invoke();
+        }
+
+        public void OnStartViewingHistory()
+        {
+            prompt.Hide();
+            autoReader.allowToggle = false;
+            conversationManager.allowUserPrompts = false;
+
+            if (autoReader.isOn)
+                autoReader.Disable();
+        }
+
+        public void OnStopViewingHistory()
+        {
+            prompt.Show();
+            autoReader.allowToggle = true;
+            conversationManager.allowUserPrompts = true;
+        }
+
         public void ApplySpeakerDataToDialogueContainer(string speakerName)
         {
             Character character = CharacterManager.instance.GetCharacter(speakerName);
@@ -95,7 +118,10 @@ namespace DIALOGUE
             if (speakerName.ToLower() != "narrator")
                 dialogueContainer.nameContainer.Show(speakerName);
             else
+            {
                 HideSpeakerName();
+                dialogueContainer.nameContainer.nameText.text = "";
+            }
         }
         public void HideSpeakerName() => dialogueContainer.nameContainer.Hide();
 
@@ -105,7 +131,13 @@ namespace DIALOGUE
             return Say(conversation);
         }
 
-        public Coroutine Say(List<string> conversation)
+        public Coroutine Say(List<string> lines)
+        {
+            Conversation conversation = new Conversation(lines);
+            return conversationManager.StartConversation(conversation);
+        }
+
+        public Coroutine Say(Conversation conversation)
         {
             return conversationManager.StartConversation(conversation);
         }

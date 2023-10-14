@@ -1,3 +1,41 @@
+playsfx(thunder_strong_01)
+Narrator "สายฟ้า!"
+
+
+
+ShowStatus()
+enter Raelin "หัวหน้าคะ บริษัทเรามีจำนวนพนักงานน้อยควรรับสมัครพนักงานไหมคะ?(งบประมาณ -1 การตลาด -1 จำนวนพนักงาน +5)"
+
+choice "คุณจะตัดสินใจอย่างไร?"
+{
+    -อนุมัติ และรับสมัครพนักงานเพิ่ม
+        decision(-ec 5 -eh 0 -es 0 -m -1 -r 0 -b -1 -w 0 -wk 0)
+        Raelin "ค่ะ ฉันจะดำเนินการให้เร็วที่สุด"
+        <mainChar> เรื่องต่อไปล่ะ?
+        Raelin "หัวหน้าคะ บริษัทเรามีพนักงานบริษัทเรามีทักษะน้อยควรฝึกทักษะของพนักงานเราไหมคะ?( งบประมาณ -1 ทักษะพนักงาน +0.5 )"
+        choice "คุณจะตัดสินใจอย่างไร"
+        {
+            -อนุมัติ และจ้างคนฝึกทักษะพนักงาน
+                decision(-ec 0 -eh 0 -es 0.5 -m 0 -r 0 -b -1 -w 0 -wk 0)
+                Raelin "ค่ะ จะหาวิธีฝึกพนักงานให้เก่งขึ้นค่ะ"
+            -ไม่อนุมัติ
+            Raelin "ค่ะ"
+                <mainChar> เรื่องต่อไปล่ะ?
+        }
+    -ไม่อนุมัติ
+        Raelin "ค่ะ"
+        <mainChar> เรื่องต่อไปล่ะ?
+        Raelin "หัวหน้าคะ บริษัทเรามีพนักงานบริษัทเรามีทักษะน้อยควรฝึกทักษะของพนักงานเราไหมคะ?( งบประมาณ -1 ทักษะพนักงาน +0.5 )"
+        choice "คุณจะตัดสินใจอย่างไร"
+        {
+            -อนุมัติ และจ้างคนฝึกทักษะพนักงาน
+                Raelin "ค่ะ จะหาวิธีฝึกพนักงานให้เก่งขึ้นค่ะ"
+            -ไม่อนุมัติ
+            Raelin "ค่ะ"
+                <mainChar> เรื่องต่อไปล่ะ?
+        }
+}       
+
 Narrator "คุณชื่ออะไร ?"
 
 input "Enter your Name."
@@ -16,11 +54,9 @@ wait(1)
 
 SetLayerMedia(background "Fantasy Landscape" -aud true -spd 0.7 -blend hurricane)
 
-CreateCharacter(Raelin -e true -i true)
-
 Raelin "ยินดีตอนรับสู่อวกาศ"
 
-SetLayerMedia(cinematic -m "#/Graphics/Gallery/flower" -blend leftRight)
+SetLayerMedia(cinematic -m "/~Graphics/Gallery/flower" -blend leftRight)
 
 Raelin "ลองดูรูปนี้สิ"
 
